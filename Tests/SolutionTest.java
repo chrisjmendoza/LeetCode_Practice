@@ -89,6 +89,31 @@ public class SolutionTest {
         assertEquals(sol.sudoku3(sudoku), true);
     }
 
+    @Test
+    public void testIsCryptSolution() {
+        System.out.println("Running: testIsCryptSolution");
+        String[] cryptOne = {"TEN", "TWO", "ONE"};
+        char[][] solutionOne = {{'O', '1'}, {'T', '0'}, {'W', '9'}, {'E', '5'}, {'N', '4'}};
+
+        String[] cryptTwo = {"SEND", "MORE", "MONEY"};
+        char[][] solutionTwo = {{'O', '0'}, {'M', '1'}, {'Y', '2'}, {'E', '5'}, {'N', '6'}, {'D', '7'}, {'R', '8'}, {'S', '9'}};
+
+        String[] cryptThree = {"A", "A", "A"};
+        char[][] solutionThree = {{'A','0'}};
+
+        String[] cryptFour = {"AAAAAAAAAAAAAA", "BBBBBBBBBBBBBB", "CCCCCCCCCCCCCC"};
+        char[][] solutionFour = {{'A','0'}, {'B','1'}, {'C','2'}};
+
+        String[] cryptFive = {"AAAAAAAAAAAAAA", "BBBBBBBBBBBBBB", "CCCCCCCCCCCCCC"};
+        char[][] solutionFive = {{'A','1'}, {'B','2'}, {'C','3'}};
+
+        assertEquals(sol.isCryptSolution(cryptOne, solutionOne), false);
+        assertEquals(sol.isCryptSolution(cryptTwo, solutionTwo), true);
+        assertEquals(sol.isCryptSolution(cryptThree, solutionThree), true);
+        assertEquals(sol.isCryptSolution(cryptFour, solutionFour), false);
+        assertEquals(sol.isCryptSolution(cryptFive, solutionFive), true);
+    }
+
     @After
     public void tearDown() throws Exception {
         System.out.println("Running: tearDown");
