@@ -1,9 +1,6 @@
 import org.jetbrains.annotations.Contract;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 class Solution {
 
@@ -332,6 +329,15 @@ class Solution {
         return true;
     }
 
+    /**
+     * Sudoku is a number-placement puzzle. The objective is to fill a 9 × 9 grid with numbers in
+     * such a way that each column, each row, and each of the nine 3 × 3 sub-grids that compose the
+     * grid all contain all of the numbers from 1 to 9 one time.
+     *
+     * Implement an algorithm that will check whether the given grid of numbers represents a valid
+     * Sudoku puzzle according to the layout rules described above. Note that the puzzle
+     * represented by grid does not have to be solvable.
+     */
     boolean sudoku3(char[][] grid) {
         for(int i = 0; i < 9; i++) {
             char[] row = new char[9];
@@ -348,6 +354,11 @@ class Solution {
         return true;
     }
 
+    /**
+     * Helper method for sudoku2 method
+     * @param check a given row of 9 characters from the sudoku board
+     * @return True if there are no repeating numbers, false if there are
+     */
     boolean validate(char[] check) {
         StringBuilder i = new StringBuilder();
         Arrays.sort(check);
@@ -465,5 +476,180 @@ class Solution {
         }
         return sb.toString();
     }
+
+    boolean isCryptSolution2(String[] crypt, char[][] solution) {
+        for(char[] arr : solution) {
+            for(int i = 0; i < crypt.length; i++) {
+                crypt[i] = crypt[i].replace(arr[0], arr[1]);
+            }
+        }
+
+        for(int i = 0; i < crypt.length; i++) {
+            if(!crypt[i].equals("0") && crypt[i].startsWith("0")) return false;
+        }
+
+        return Long.parseLong(crypt[0]) + Long.parseLong(crypt[1]) == Long.parseLong(crypt[2]);
+    }
+
+    /**
+     * Note: Try to solve this task in O(n) time using O(1) additional space, where n is the
+     * number of elements in the list, since this is what you'll be asked to do during an interview.
+     * Given a singly linked list of integers l and an integer k, remove all elements from list l
+     * that have a value equal to k.
+     *
+     * Example
+     *
+     * For l = [3, 1, 2, 3, 4, 5] and k = 3, the output should be
+     * removeKFromList(l, k) = [1, 2, 4, 5];
+     *
+     * For l = [1, 2, 3, 4, 5, 6, 7] and k = 10, the output should be
+     * removeKFromList(l, k) = [1, 2, 3, 4, 5, 6, 7].
+     * @param l
+     * @param k
+     * @return
+     */
+    ListNode<Integer> removeKFromList(ListNode<Integer> l, int k) {
+
+        // No Node Exists
+        if(l == null) return null;
+
+        ListNode<Integer> head = l; // Store the head to return
+
+        do {
+            // Check for the next node
+            if(l.next != null) {
+                // If the next node after is the K value
+                if(l.next.value.equals(k)) {
+                    // Check for a node following
+                    if(l.next.next != null) {
+                        // Move the reference pointer from the next to the one after
+                        l.next = l.next.next;
+                    } else {
+                        // If there isn't a node past next, simply remove the pointer to next
+                        l.next = null; // End the line if the next node matches and is the end
+                    }
+                } else {
+                    // The next node DOES NOT match the value and can be moved into
+                    l = l.next;
+                }
+            }
+        } while (l.next != null); // Keep going until you reach the end of the list
+
+        // At this point, the only possible K value can reside in the head. Check the head
+        if(head.value.equals(k)) {
+            // If the head has a next, simply move the head reference to the next node
+            if(head.next != null) {
+                head = head.next;
+            } else {
+                // The K value head does NOT have a next, so simply return null
+                return null;
+            }
+        }
+
+        return head;
+    }
+
+    /**
+     * Note: Try to solve this task in O(n) time using O(1) additional space, where n is the
+     * number of elements in l, since this is what you'll be asked to do during an interview.
+     *
+     * Given a singly linked list of integers, determine whether or not it's a palindrome.
+     *
+     * Example
+     *
+     * For l = [0, 1, 0], the output should be
+     * isListPalindrome(l) = true;
+     * For l = [1, 2, 2, 3], the output should be
+     * isListPalindrome(l) = false.
+     *
+     * Input/Output
+     * [time limit] 3000ms (java)
+     * [input] linkedlist.integer l
+     * A singly linked list of integers.
+     *
+     * Guaranteed constraints:
+     * 0 ≤ list size ≤ 5 · 105,
+     * -109 ≤ element value ≤ 109.
+     *
+     * [output] boolean
+     *
+     * Return true if l is a palindrome, otherwise return false.
+     */
+    boolean isListPalindrome(ListNode<Integer> l) {
+
+        if(l == null) return true;
+
+        ArrayList<Integer> values = new ArrayList<>();
+
+        values.add(l.value);
+
+        if(l.next != null) {
+            do {
+                l = l.next;
+                values.add(l.value);
+            } while(l.next != null);
+        }
+
+        for(int i = 0; i < values.size() / 2; i++) {
+            if(!values.get(i).equals(values.get(values.size() - 1 - i))) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * You're given 2 huge integers represented by linked lists. Each linked list element is a
+     * number from 0 to 9999 that represents a number with exactly 4 digits. The represented number
+     * might have leading zeros. Your task is to add up these huge integers and return the result
+     * in the same format.
+     *
+     * Example
+     *
+     * For a = [9876, 5432, 1999] and b = [1, 8001], the output should be
+     * addTwoHugeNumbers(a, b) = [9876, 5434, 0].
+     *
+     * Explanation: 987654321999 + 18001 = 987654340000.
+     *
+     * For a = [123, 4, 5] and b = [100, 100, 100], the output should be
+     * addTwoHugeNumbers(a, b) = [223, 104, 105].
+     *
+     * Explanation: 12300040005 + 10001000100 = 22301040105.
+     *
+     * Input/Output
+     *
+     * [time limit] 3000ms (java)
+     * [input] linkedlist.integer a
+     * The first number, without its leading zeros.
+     *
+     * Guaranteed constraints:
+     * 0 ≤ a size ≤ 104,
+     * 0 ≤ element value ≤ 9999.
+     *
+     * [input] linkedlist.integer b
+     *
+     * The second number, without its leading zeros.
+     *
+     * Guaranteed constraints:
+     * 0 ≤ b size ≤ 104,
+     * 0 ≤ element value ≤ 9999.
+     *
+     * [output] linkedlist.integer
+     *
+     * The result of adding a and b together, returned without leading zeros in the same format.
+     * @param a linkedlist.integer a
+     * @param b linkedlist.integer b
+     * @return linkedlist.integer
+     */
+    ListNode<Integer> addTwoHugeNumbers(ListNode<Integer> a, ListNode<Integer> b) {
+
+        Long first, second;
+        StringBuilder firstNum, secondNum;
+
+        firstNum = new StringBuilder();
+        secondNum = new StringBuilder();
+
+
+    }
+
 
 }
