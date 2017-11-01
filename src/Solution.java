@@ -1,5 +1,7 @@
+import javafx.util.converter.BigIntegerStringConverter;
 import org.jetbrains.annotations.Contract;
 
+import java.math.BigInteger;
 import java.util.*;
 
 class Solution {
@@ -642,14 +644,221 @@ class Solution {
      */
     ListNode<Integer> addTwoHugeNumbers(ListNode<Integer> a, ListNode<Integer> b) {
 
-        Long first, second;
+        Long sum;
+        BigInteger bigNum, bigNum2;
+        StringBuilder sumString = new StringBuilder();
         StringBuilder firstNum, secondNum;
 
         firstNum = new StringBuilder();
         secondNum = new StringBuilder();
 
+        int maxValue = 0;
+
+        if(a != null) {
+            do {
+                maxValue = a.value.toString().length() > maxValue ? a.value.toString().length() : maxValue;
+                for(int i = 0; i < 4 - a.value.toString().length(); i++) firstNum.append("0");
+                firstNum.append(a.value);
+                a = a.next;
+            } while(a != null);
+        }
+
+        if(b != null) {
+            do {
+                maxValue = b.value.toString().length() > maxValue ? b.value.toString().length() : maxValue;
+                for(int i = 0; i < 4 - b.value.toString().length(); i++) secondNum.append("0");
+                secondNum.append(b.value);
+                b = b.next;
+            } while(b != null);
+        }
+
+        bigNum = new BigInteger(firstNum.toString());
+        bigNum2 = new BigInteger(secondNum.toString());
+
+        BigInteger bigSum = bigNum.add(bigNum2);
+        // sum = Long.parseLong(firstNum.toString()) + Long.parseLong(secondNum.toString());
+
+        if(bigSum.toString().length() % 4 != 0) {
+            for(int i = 0; i < 4 - bigSum.toString().length() % 4; i++) {
+                sumString.append("0");
+            }
+        }
+        sumString.append(bigSum.toString());
+        int stringLen = sumString.length();
+
+        int checker = 0;
+
+        ArrayList<Integer> values = new ArrayList<>();
+        for(int i = 0; i < stringLen; i+=4) {
+            String seq = sumString.substring(i, i + 4);
+            int num = Integer.parseInt(seq);
+            // Check for a series with a leading 0 and not a value of 0
+
+                // Add the value to the array
+                values.add(num);
+                // Check if the next series is not a multiple of max and add the final values if you're at the end
+                if(stringLen % (maxValue - checker) != 0 && i + maxValue * 2 > stringLen) {
+                    values.add(Integer.parseInt(sumString.substring(i+4, sumString.length())));
+                    break;
+
+            }
+        }
+
+        ListNode<Integer> sumNodeHead = new ListNode<>(values.get(0));
+        ListNode<Integer> currentNode = sumNodeHead;
+
+        for(int i = 1; i < values.size(); i++) {
+            currentNode.next = new ListNode<>(values.get(i));
+            currentNode = currentNode.next;
+        }
+
+        printNodes(sumNodeHead);
+        return sumNodeHead;
 
     }
 
+    void printNodes(ListNode<Integer> node) {
+        System.out.println("");
+        while(node != null) {
+            System.out.println(node.value);
+            node = node.next;
+        }
+    }
 
+    ListNode<Integer> addTwoHugeNumbers2(ListNode<Integer> a, ListNode<Integer> b) {
+
+        ListNode<Integer> headA = a, prev = null, headB = b, returnHead = null;
+
+        while(headA!=null){
+            ListNode<Integer> next = headA.next;
+            headA.next = prev;
+            prev = headA;
+            headA = next;
+        }
+
+        headA = prev;
+        prev = null;
+
+        while(headB != null){
+            ListNode<Integer> next = headB.next;
+            headB.next = prev;
+            prev = headB;
+            headB = next;
+        }
+        headB = prev;
+
+        int carry = 0;
+        while(headA != null && headB != null){
+            int sum = headA.value + headB.value + carry;
+            headA = headA.next;
+            headB = headB.next;
+
+            carry = sum / 10000;
+            sum = sum % 10000;
+
+            ListNode<Integer> newNode = new ListNode<Integer>(sum);
+            newNode.next = returnHead;
+            returnHead = newNode;
+        }
+
+        while(headA != null){
+            int sum = headA.value +  carry;
+            headA = headA.next;
+
+            carry = sum / 10000;
+            sum = sum % 10000;
+            ListNode<Integer> newNode = new ListNode<Integer>(sum);
+
+            newNode.next = returnHead;
+            returnHead = newNode;
+        }
+
+        while(headB != null){
+
+            int sum = headB.value + carry;
+            headB = headB.next;
+
+            carry = sum / 10000;
+            sum = sum % 10000;
+
+            ListNode<Integer> newNode = new ListNode<Integer>(sum);
+            newNode.next = returnHead;
+            returnHead = newNode;
+        }
+        if(carry != 0){
+            ListNode<Integer> newNode = new ListNode<Integer>(carry);
+            newNode.next = returnHead;
+            returnHead = newNode;
+        }
+
+        return returnHead;
+
+    }
+
+    /**
+     * Note: Your solution should have O(l1.length + l2.length) time complexity, since this is what
+     * you will be asked to accomplish in an interview.
+     *
+     * Given two singly linked lists sorted in non-decreasing order, your task is to merge them. In
+     * other words, return a singly linked list, also sorted in non-decreasing order, that contains
+     * the elements from both original lists.
+     *
+     * Example
+     *
+     * For l1 = [1, 2, 3] and l2 = [4, 5, 6], the output should be
+     * mergeTwoLinkedLists(l1, l2) = [1, 2, 3, 4, 5, 6];
+     * For l1 = [1, 1, 2, 4] and l2 = [0, 3, 5], the output should be
+     * mergeTwoLinkedLists(l1, l2) = [0, 1, 1, 2, 3, 4, 5].
+     *
+     * Input/Output
+
+     [time limit] 3000ms (java)
+     [input] linkedlist.integer l1
+
+     A singly linked list of integers.
+
+     Guaranteed constraints:
+     0 ≤ list size ≤ 104,
+     -109 ≤ element value ≤ 109.
+
+     [input] linkedlist.integer l2
+
+     A singly linked list of integers.
+
+     Guaranteed constraints:
+     0 ≤ list size ≤ 104,
+     -109 ≤ element value ≤ 109.
+
+     [output] linkedlist.integer
+
+     A list that contains elements from both l1 and l2, sorted in non-decreasing order.
+     */
+    ListNode<Integer> mergeTwoLinkedLists(ListNode<Integer> l1, ListNode<Integer> l2) {
+
+        // Check for an empty list and return the other one
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+
+        // Create a starting Node based on the lower value of the first nodes
+        ListNode<Integer> head = l1.value < l2.value ? l1 : l2;
+        if(l1.value > l2.value) l2 = l2.next;
+        else l1 = l1.next;
+
+        ListNode<Integer> current = head;
+
+        while(l1 != null && l2 != null) {
+            ListNode<Integer> node = l1.value < l2.value ? l1 : l2;
+            current.next = node;
+            current = node;
+            if(l1.value < l2.value) l1 = l1.next;
+            else l2 = l2.next;
+        }
+
+        if(l1 != null) current.next = l1;
+        if(l2 != null) current.next = l2;
+
+        // return the head of the list
+        printNodes(head);
+        return head;
+    }
 }

@@ -124,46 +124,31 @@ public class SolutionTest {
     public void testRemoveKFromList() {
         System.out.println("Running: testRemoveKFromList");
 
-        ListNode<Integer> n1 = new ListNode<>();
-        ListNode<Integer> n2 = new ListNode<>();
-        ListNode<Integer> n3 = new ListNode<>();
-        ListNode<Integer> n4 = new ListNode<>();
-        ListNode<Integer> n5 = new ListNode<>();
-        ListNode<Integer> n6 = new ListNode<>();
+        ListNode<Integer> n1 = new ListNode<>(3);
+        ListNode<Integer> n2 = new ListNode<>(1);
+        ListNode<Integer> n3 = new ListNode<>(2);
+        ListNode<Integer> n4 = new ListNode<>(3);
+        ListNode<Integer> n5 = new ListNode<>(4);
+        ListNode<Integer> n6 = new ListNode<>(5);
 
-        n1.value = 3;
         n1.next = n2;
-
-        n2.value = 1;
         n2.next = n3;
-
-        n3.value = 2;
         n3.next = n4;
-
-        n4.value = 3;
         n4.next = n5;
-
-        n5.value = 4;
         n5.next = n6;
 
         n6.value = 5;
 
 
-        ListNode<Integer> m1 = new ListNode<>();
-        ListNode<Integer> m2 = new ListNode<>();
-        ListNode<Integer> m3 = new ListNode<>();
-        ListNode<Integer> m4 = new ListNode<>();
+        ListNode<Integer> m1 = new ListNode<>(1);
+        ListNode<Integer> m2 = new ListNode<>(2);
+        ListNode<Integer> m3 = new ListNode<>(4);
+        ListNode<Integer> m4 = new ListNode<>(5);
 
-        m1.value = 1;
         m1.next = m2;
-
-        m2.value = 2;
         m2.next = m3;
-
-        m3.value = 4;
         m3.next = m4;
 
-        m4.value = 5;
         sol.removeKFromList(n1, 3);
         assertEquals(sol.removeKFromList(n1, 3), m1);
     }
@@ -171,31 +156,94 @@ public class SolutionTest {
     @Test
     public void testIsListPalindrome() {
         System.out.println("Running: testIsListPalindrome");
-        ListNode<Integer> n1 = new ListNode<>();
-        ListNode<Integer> n2 = new ListNode<>();
-        ListNode<Integer> n3 = new ListNode<>();
-        ListNode<Integer> n4 = new ListNode<>();
-        ListNode<Integer> n5 = new ListNode<>();
-        ListNode<Integer> n6 = new ListNode<>();
+        ListNode<Integer> n1 = new ListNode<>(1);
+        ListNode<Integer> n2 = new ListNode<>(1000000000);
+        ListNode<Integer> n3 = new ListNode<>(-1000000000);
+        ListNode<Integer> n4 = new ListNode<>(-1000000000);
+        ListNode<Integer> n5 = new ListNode<>(1000000000);
+        ListNode<Integer> n6 = new ListNode<>(1);
 
-        n1.value = 1;
         n1.next = n2;
-
-        n2.value = 1000000000;
         n2.next = n3;
-
-        n3.value = -1000000000;
         n3.next = n4;
-
-        n4.value = -1000000000;
         n4.next = n5;
-
-        n5.value = 1000000000;
         n5.next = n6;
 
-        n6.value = 1;
-
         assertEquals(sol.isListPalindrome(n1), true);
+    }
+
+    @Test
+    public void testAddTwoHugeNumbers() {
+        ListNode<Integer> n1 = new ListNode<>(9876);
+        ListNode<Integer> n2 = new ListNode<>(5432);
+        ListNode<Integer> n3 = new ListNode<>(1999);
+
+        n1.next = n2;
+        n2.next = n3;
+
+        ListNode<Integer> m1 = new ListNode<>(1);
+        ListNode<Integer> m2 = new ListNode<>(8001);
+
+        m1.next = m2;
+
+        ListNode<Integer> a1 = new ListNode<>(123);
+        ListNode<Integer> a2 = new ListNode<>(4);
+        ListNode<Integer> a3 = new ListNode<>(5);
+
+        a1.next = a2;
+        a2.next = a3;
+
+        ListNode<Integer> b1 = new ListNode<>(100);
+        ListNode<Integer> b2 = new ListNode<>(100);
+        ListNode<Integer> b3 = new ListNode<>(100);
+
+        b1.next = b2;
+        b2.next = b3;
+
+        ListNode<Integer> z1 = new ListNode<>(0);
+        ListNode<Integer> y1 = new ListNode<>(0);
+
+        ListNode<Integer> x1 = new ListNode<>(9999);
+        ListNode<Integer> x2 = new ListNode<>(9999);
+        ListNode<Integer> x3 = new ListNode<>(9999);
+        ListNode<Integer> x4 = new ListNode<>(9999);
+        ListNode<Integer> x5 = new ListNode<>(9999);
+
+        ListNode<Integer> one = new ListNode<>(1);
+
+        x1.next = x2;
+        x2.next = x3;
+        x3.next = x4;
+        x4.next = x5;
+//
+//        sol.addTwoHugeNumbers(n1, m1);
+//        sol.addTwoHugeNumbers(a1, b1);
+//        sol.addTwoHugeNumbers(y1, z1);
+//        sol.addTwoHugeNumbers(one, x1);
+
+        sol.addTwoHugeNumbers2(n1, m1);
+        sol.addTwoHugeNumbers2(a1, b1);
+        sol.addTwoHugeNumbers2(y1, z1);
+        sol.addTwoHugeNumbers2(one, x1);
+    }
+
+    @Test
+    public void testMergeTwoLinkedLists() {
+        ListNode<Integer> a1 = new ListNode<>(1);
+        ListNode<Integer> a2 = new ListNode<>(2);
+        ListNode<Integer> a3 = new ListNode<>(3);
+
+        a1.next = a2;
+        a2.next = a3;
+
+        ListNode<Integer> b1 = new ListNode<>(4);
+        ListNode<Integer> b2 = new ListNode<>(5);
+        ListNode<Integer> b3 = new ListNode<>(6);
+
+        b1.next = b2;
+        b2.next = b3;
+
+        sol.mergeTwoLinkedLists(a1, b1);
     }
 
     @After
