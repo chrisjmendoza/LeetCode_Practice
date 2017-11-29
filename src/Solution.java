@@ -1,6 +1,3 @@
-import javafx.util.converter.BigIntegerStringConverter;
-import org.jetbrains.annotations.Contract;
-
 import java.math.BigInteger;
 import java.util.*;
 
@@ -165,8 +162,7 @@ class Solution {
      * @param t2 The second root Node
      * @return New root node
      */
-    @Contract("!null, null -> !null")
-    private TreeNode mergeTreesSolution(TreeNode t1, TreeNode t2) {
+    TreeNode mergeTreesSolution(TreeNode t1, TreeNode t2) {
         if (t1 == null)
             return t2;
         if (t2 == null)
@@ -644,7 +640,6 @@ class Solution {
      */
     ListNode<Integer> addTwoHugeNumbers(ListNode<Integer> a, ListNode<Integer> b) {
 
-        Long sum;
         BigInteger bigNum, bigNum2;
         StringBuilder sumString = new StringBuilder();
         StringBuilder firstNum, secondNum;
@@ -656,7 +651,8 @@ class Solution {
 
         if(a != null) {
             do {
-                maxValue = a.value.toString().length() > maxValue ? a.value.toString().length() : maxValue;
+                maxValue = a.value.toString().length() > maxValue ? a.value.toString().length() :
+                        maxValue;
                 for(int i = 0; i < 4 - a.value.toString().length(); i++) firstNum.append("0");
                 firstNum.append(a.value);
                 a = a.next;
@@ -665,7 +661,8 @@ class Solution {
 
         if(b != null) {
             do {
-                maxValue = b.value.toString().length() > maxValue ? b.value.toString().length() : maxValue;
+                maxValue = b.value.toString().length() > maxValue ? b.value.toString().length() :
+                        maxValue;
                 for(int i = 0; i < 4 - b.value.toString().length(); i++) secondNum.append("0");
                 secondNum.append(b.value);
                 b = b.next;
@@ -676,7 +673,6 @@ class Solution {
         bigNum2 = new BigInteger(secondNum.toString());
 
         BigInteger bigSum = bigNum.add(bigNum2);
-        // sum = Long.parseLong(firstNum.toString()) + Long.parseLong(secondNum.toString());
 
         if(bigSum.toString().length() % 4 != 0) {
             for(int i = 0; i < 4 - bigSum.toString().length() % 4; i++) {
@@ -696,7 +692,8 @@ class Solution {
 
                 // Add the value to the array
                 values.add(num);
-                // Check if the next series is not a multiple of max and add the final values if you're at the end
+                // Check if the next series is not a multiple of max and add the final values if
+            // you're at the end
                 if(stringLen % (maxValue - checker) != 0 && i + maxValue * 2 > stringLen) {
                     values.add(Integer.parseInt(sumString.substring(i+4, sumString.length())));
                     break;
@@ -790,7 +787,7 @@ class Solution {
             newNode.next = returnHead;
             returnHead = newNode;
         }
-
+        printNodes(returnHead);
         return returnHead;
 
     }
@@ -860,5 +857,150 @@ class Solution {
         // return the head of the list
         printNodes(head);
         return head;
+    }
+
+    /**
+     *
+     * For l = [1, 2, 3, 4, 5] and k = 1, the outNote: Your solution should have O(n) time complexity, where n is the number of element in l,
+     * and O(1) additional space complexity, since this is what you would be asked to accomplish
+     * in an interview.
+     *
+     * Given a linked list l, reverse its nodes k at a time and return the modified list. k is a
+     * positive integer that is less than or equal to the length of l. If the number of nodes in
+     * the linked list is not a multiple of k, then the nodes that are left out at the end
+     * should remain as-is.
+     *
+     * You may not alter the values in the nodes - only the nodes themselves can be changed.
+     *
+     * Example
+     *
+     * For l = [1, 2, 3, 4, 5] and k = 2, the output should be
+     * reverseNodesInKGroups(l, k) = [2, 1, 4, 3, 5];
+     *put should be
+     * reverseNodesInKGroups(l, k) = [1, 2, 3, 4, 5];
+     *
+     * For l = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] and k = 3, the output should be
+     * reverseNodesInKGroups(l, k) = [3, 2, 1, 6, 5, 4, 9, 8, 7, 10, 11].
+     * @param l
+     * @param k
+     * @return
+     */
+    ListNode<Integer> reverseNodesInKGroups(ListNode<Integer> l, int k) {
+
+        // The head of the nodes will be the first of the reversed nodes. Return this at the end.
+        ListNode<Integer> head = nodeFind(l, k);
+        ListNode<Integer> current = l;
+        // The prev node will start as null as it will come before the first node
+        ListNode<Integer> prev = null;
+        ListNode<Integer> next;
+
+        // Since K is not larger than the length of the LinkedList, use a do/while loop
+
+        do {
+            // Put placeholder for node after rotation chain
+            next = nodeFind(current, k+1);
+
+            // Set next to the last of the rotate chain
+            if(prev != null) prev.next = nodeFind(current, k);
+            // Rotate the chain
+            rotateNode(current, k);
+            // Set current.next to the placeholder
+            current.next = next;
+            // Set prev to current
+            prev = current;
+            // Set current to placeholder
+            current = next;
+            // Lather, Rinse, Repeat
+
+        } while(nodeGroupCheck(current, k));
+
+        //printNodes(head);
+        return head;
+    }
+
+    /**
+     * This method was built for the reverseNodesInKGroups method. It returns whether a LinkedList
+     * has k number of nodes
+     * @param n the head of the list
+     * @param k the number of nodes to check
+     * @return true if there are k nodes in the list
+     */
+    private boolean nodeGroupCheck(ListNode<Integer> n, int k) {
+        for(int i = 0; i < k; i++) {
+            if(n == null) return false;
+            n = n.next;
+        }
+        return true;
+    }
+
+    /**
+     * Returns a node k deep
+     * @param n the head of the list
+     * @param k the numbers of nodes to move over
+     * @return the node k value down the chain
+     */
+    private ListNode<Integer> nodeFind(ListNode<Integer> n, int k) {
+        for(int i = 1; i < k; i++) {
+            n = n.next;
+        }
+        return n;
+    }
+
+    /**
+     * Helper method for reverseNodesInKGroups method. Reverses k nodes in a linkedlist.
+     * @param n the head of the list to reverse
+     * @param k the number of nodes to reverse
+     */
+    private void rotateNode(ListNode<Integer> n, int k) {
+        ListNode<Integer> currNode = n, prevNode = null, nextNode;
+        for(int i = 0; i < k; i++) {
+            nextNode = currNode.next;
+            currNode.next = prevNode;
+            prevNode = currNode;
+            currNode = nextNode;
+        }
+    }
+
+    /**
+     * Note: Try to solve this task in O(list size) time using O(1) additional space, since this is
+     * what you'll be asked during an interview.
+     *
+     * Given a singly linked list of integers l and a non-negative integer n, move the last n list
+     * nodes to the beginning of the linked list.
+     * 
+     * Example
+     *
+     * For l = [1, 2, 3, 4, 5] and n = 3, the output should be
+     * rearrangeLastN(l, n) = [3, 4, 5, 1, 2];
+     * For l = [1, 2, 3, 4, 5, 6, 7] and n = 1, the output should be
+     * rearrangeLastN(l, n) = [7, 1, 2, 3, 4, 5, 6].
+     *
+     * Input/Output
+     *
+     * [time limit] 3000ms (java)
+     * [input] linkedlist.integer l
+     *
+     * A singly linked list of integers.
+     *
+     * Guaranteed constraints:
+     * 0 ≤ list size ≤ 105,
+     * -1000 ≤ element value ≤ 1000.
+     *
+     *  [input] integer n
+     *
+     *  A non-negative integer.
+     *
+     *  Guaranteed constraints:
+     *  0 ≤ n ≤ list size.
+     *
+     *  [output] linkedlist.integer
+     *
+     * @param l
+     * @param n
+     * @return l with the n last elements moved to the beginning.
+     */
+    ListNode<Integer> rearrangeLastN(ListNode<Integer> l, int n) {
+
+        return null;
     }
 }

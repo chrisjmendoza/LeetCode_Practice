@@ -186,16 +186,16 @@ public class SolutionTest {
 
         m1.next = m2;
 
-        ListNode<Integer> a1 = new ListNode<>(123);
-        ListNode<Integer> a2 = new ListNode<>(4);
-        ListNode<Integer> a3 = new ListNode<>(5);
+        ListNode<Integer> a1 = new ListNode<>(1);
+        ListNode<Integer> a2 = new ListNode<>(2);
+        ListNode<Integer> a3 = new ListNode<>(3);
 
         a1.next = a2;
         a2.next = a3;
 
-        ListNode<Integer> b1 = new ListNode<>(100);
-        ListNode<Integer> b2 = new ListNode<>(100);
-        ListNode<Integer> b3 = new ListNode<>(100);
+        ListNode<Integer> b1 = new ListNode<>(3);
+        ListNode<Integer> b2 = new ListNode<>(4);
+        ListNode<Integer> b3 = new ListNode<>(5);
 
         b1.next = b2;
         b2.next = b3;
@@ -246,13 +246,26 @@ public class SolutionTest {
         sol.mergeTwoLinkedLists(a1, b1);
     }
 
+    @Test
+    public void testReverseNodesInKGroups() {
+        ListNode<Integer> a1 = new ListNode<>(1);
+        ListNode<Integer> a2 = new ListNode<>(2);
+        ListNode<Integer> a3 = new ListNode<>(3);
+        ListNode<Integer> a4 = new ListNode<>(4);
+        ListNode<Integer> a5 = new ListNode<>(5);
+        a1.next = a2;
+        a2.next = a3;
+        a3.next = a4;
+        a4.next = a5;
+
+        sol.reverseNodesInKGroups(a1, 3);
+    }
+
     @After
     public void tearDown() throws Exception {
         System.out.println("Running: tearDown");
         sol = null;
         assertNull(sol);
     }
-
-
 
 }
