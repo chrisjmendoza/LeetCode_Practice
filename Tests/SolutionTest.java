@@ -229,6 +229,7 @@ public class SolutionTest {
 
     @Test
     public void testMergeTwoLinkedLists() {
+        System.out.println("Running: testMergeTwoLinkedLists");
         ListNode<Integer> a1 = new ListNode<>(1);
         ListNode<Integer> a2 = new ListNode<>(2);
         ListNode<Integer> a3 = new ListNode<>(3);
@@ -248,6 +249,7 @@ public class SolutionTest {
 
     @Test
     public void testReverseNodesInKGroups() {
+        System.out.println("Running: testReverseNodesInKGroups");
         ListNode<Integer> a1 = new ListNode<>(1);
         ListNode<Integer> a2 = new ListNode<>(2);
         ListNode<Integer> a3 = new ListNode<>(3);
@@ -259,6 +261,22 @@ public class SolutionTest {
         a4.next = a5;
 
         sol.reverseNodesInKGroups(a1, 3);
+    }
+
+    @Test
+    public void testRearrangeLastN() {
+        System.out.println("Running: testRearrangeLastN");
+        ListNode<Integer> a1 = new ListNode<>(1);
+        ListNode<Integer> a2 = new ListNode<>(2);
+        ListNode<Integer> a3 = new ListNode<>(3);
+        ListNode<Integer> a4 = new ListNode<>(4);
+        ListNode<Integer> a5 = new ListNode<>(5);
+        a1.next = a2;
+        a2.next = a3;
+        a3.next = a4;
+        a4.next = a5;
+
+        sol.rearrangeLastN(a1, 3);
     }
 
     @After

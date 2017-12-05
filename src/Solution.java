@@ -962,12 +962,12 @@ class Solution {
     }
 
     /**
-     * Note: Try to solve this task in O(list size) time using O(1) additional space, since this is
-     * what you'll be asked during an interview.
+     * Note: Try to solve this task in O(list size) time using O(1) additional space, since this
+     * is what you'll be asked during an interview.
      *
      * Given a singly linked list of integers l and a non-negative integer n, move the last n list
      * nodes to the beginning of the linked list.
-     * 
+     *
      * Example
      *
      * For l = [1, 2, 3, 4, 5] and n = 3, the output should be
@@ -1001,6 +1001,33 @@ class Solution {
      */
     ListNode<Integer> rearrangeLastN(ListNode<Integer> l, int n) {
 
-        return null;
+        if(n == 0) return l;
+
+        // Instance Variables / Placeholder Nodes
+        ListNode<Integer> ph = l, head, tail = l, temp = l;
+
+        int counter = 1; // counter for the number of nodes, start with 1 for the first node
+        int nodeDifference;
+
+        while(temp != null && temp.next != null) {
+            counter++;
+            temp = temp.next;
+        }
+
+        nodeDifference = counter - n;
+        if(nodeDifference == 0) return l;
+
+        // Set the placeholder
+        for(int i = 0; i < nodeDifference - 1; i++) {
+            ph = ph.next;
+        }
+
+        head = ph.next;
+        ph.next = null;
+
+        temp.next = tail;
+
+        printNodes(head);
+        return head;
     }
 }
